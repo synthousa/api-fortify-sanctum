@@ -3,12 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\{ LogoutController };
-use Laravel\Fortify\Http\Controllers\
-    { 
-        AuthenticatedSessionController, RegisteredUserController, 
-        PasswordResetLinkController, ProfileInformationController, 
-        PasswordController
-    };
+use Laravel\Fortify\Http\Controllers\{AuthenticatedSessionController, RegisteredUserController, PasswordResetLinkController, ProfileInformationController, PasswordController};
 
 Route::group(['prefix' => 'auth', 'as' => 'auth.', 'middleware' => ['auth:sanctum']], function() {
 
