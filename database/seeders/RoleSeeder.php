@@ -18,7 +18,7 @@ class RoleSeeder extends Seeder{
 
         $master = User::create([
             'name' => 'sysad',
-            'email' => 'sysad@tg.gov',
+            'email' => 'sysad@apollo.api',
             'password' => Hash::make('シープ'),
             'employee_id' => '40000',
             'created_at' => now(),
@@ -31,8 +31,8 @@ class RoleSeeder extends Seeder{
         $master -> assignRole([$masterRole -> id]);
         
         $mayors = User::create([
-            'name' => 'Francine Vamplers',
-            'email' => 'fvamplersk@weibo.com',
+            'name' => 'mayors',
+            'email' => 'mayors@dept.tg',
             'password' => Hash::make('シープ'),
             'employee_id' => '37401',
             'created_at' => now(),
@@ -40,8 +40,8 @@ class RoleSeeder extends Seeder{
         ]);
 
         $pio = User::create([
-            'name' => 'Jillie Lowey',
-            'email' => 'jloweyf@google.pl',
+            'name' => 'pio',
+            'email' => 'pio@dept.tg',
             'password' => Hash::make('シープ'),
             'employee_id' => '30703',
             'created_at' => now(),
@@ -49,8 +49,8 @@ class RoleSeeder extends Seeder{
         ]);
 
         $admin = User::create([
-            'name' => 'Broddie Coope',
-            'email' => 'bcoope1l@sakura.ne.jp',
+            'name' => 'admins',
+            'email' => 'admins@dept.tg',
             'password' => Hash::make('シープ'),
             'employee_id' => '38010',
             'created_at' => now(),
