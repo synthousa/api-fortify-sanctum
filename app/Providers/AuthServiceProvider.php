@@ -3,13 +3,16 @@
 namespace App\Providers;
 
 use App\Models\User;
+use App\Models\Article;
+use App\Policies\PostPolicy;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 
 class AuthServiceProvider extends ServiceProvider {
 
     protected $policies = [
-        //
+
+        Post::class => PostPolicy::class
     ];
 
     public function boot(): void {
