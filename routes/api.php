@@ -2,12 +2,18 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Auth\{ LogoutController };
-use Laravel\Fortify\Http\Controllers\{AuthenticatedSessionController, RegisteredUserController, PasswordResetLinkController, ProfileInformationController, PasswordController};
+use App\Http\Controllers\Auth\LogoutController;
+use Laravel\Fortify\Http\Controllers\{
+    AuthenticatedSessionController, 
+    RegisteredUserController, 
+    PasswordResetLinkController, 
+    ProfileInformationController, 
+    PasswordController
+};
 
-Route::group(['prefix' => 'auth', 'as' => 'auth.', 'middleware' => ['auth:sanctum']], function() {
+Route::group(['prefix' => 'auth', 'as' => 'auth.', 'middleware' => ['auth:api']], function() {
 
-    Route::withoutMiddleware(['auth:sanctum']) -> group(function () {
+    Route::withoutMiddleware(['auth:api']) -> group(function () {
         $limit = config('fortify.limiters.login');
 
         Route::post('login', [AuthenticatedSessionController::class, 'store'])
@@ -21,19 +27,26 @@ Route::group(['prefix' => 'auth', 'as' => 'auth.', 'middleware' => ['auth:sanctu
             -> name('password.email');
     });
 
-    $verificationLimiter = config('fortify.limiters.verification', '6,1');
-
-    // Route::post('email/verification-notification', [EmailVerificationController::class, 'store']) -> middleware(['throttle:'.$verificationLimiter]);
     Route::post('logout', [LogoutController::class, 'destroy']);
 
     Route::prefix('user') -> middleware('verified') -> group(function () {
 
-        Route::get('/', fn (Request $request) => $request -> user()) -> name('user');
+        Route::get('profile', fn (Request $request) => $request -> user()) -> name('user');
 
         Route::put('profile', [ProfileInformationController::class, 'update']);
 
         Route::put('password', [PasswordController::class, 'update']);
     });
+
+    
 });
+
+
+// Route::middleware(['auth:api', 'role:system']) -> group(function () {
+    
+//     Route::get('/admin', function () {
+//         return response() -> json(['message' => 'hi Admin']);
+//     });
+// });
 
 
