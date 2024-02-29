@@ -31,7 +31,7 @@ Route::group(['middleware' => ['auth:api']], function() {
         Route::post('logout', [LogoutController::class, 'destroy']);
     });
 
-    Route::prefix('admin')->group(function () {
+    Route::prefix('account')->group(function () {
         
         Route::resources([
             'users' => UserController::class,

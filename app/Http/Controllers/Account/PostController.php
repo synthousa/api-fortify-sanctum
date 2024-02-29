@@ -8,9 +8,9 @@ use App\Models\Article;
 
 class PostController extends Controller {
 
-    public function __construct() {
-        $this->authorizeResource(Article::class);
-    }
+    // public function __construct() {
+    //     $this->authorizeResource(Article::class, 'article');
+    // }
 
     public function index(Request $request) {
         $data = Article::latest()->paginate(69);
@@ -36,17 +36,19 @@ class PostController extends Controller {
         ]);
         
         Article::create([
-            'title'->$articleAttributes['title'],
-            'slug'->$articleAttributes['slug'],
-            'img'->$articleAttributes['img'],
-            'img_desc'->$articleAttributes['img_desc'],
-            'body'->$articleAttributes['body'],
+            'title' => $articleAttributes['title'],
+            'slug' => $articleAttributes['slug'],
+            'img' => $articleAttributes['img'],
+            'img_desc' => $articleAttributes['img_desc'],
+            'body' => $articleAttributes['body'],
             'user_id' => $request->user()->id,
         ]);
 
-        return $request->wantsJson()
-            ? response()->json(['message' => 'article created'], 201)
-            : redirect()->route('posts.index');
+        if ($request->wantsJson()) {
+            return response()->json(['message' => 'article created'], 201);
+        }
+
+        return redirect()->route('posts.index');
     }
 
     public function show(Article $article) {
