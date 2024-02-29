@@ -3,7 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\LogoutController;
-use App\Http\Controllers\Admin\{UserController, RoleController, PostController };
+use App\Http\Controllers\Account\{UserController, RoleController, PostController };
 use Laravel\Fortify\Http\Controllers\{AuthenticatedSessionController, RegisteredUserController, PasswordResetLinkController, ProfileInformationController, PasswordController};
 
 Route::group(['middleware' => ['auth:api']], function() {
