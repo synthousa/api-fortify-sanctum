@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Account;
 
 use App\Models\User;
+use App\Models\Transaction;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
@@ -34,6 +35,7 @@ class UserController extends Controller {
     }
 
     public function store(Request $request) {
+
         $attributes = request()->validate([
             'name' => ['required', 'max:64'],
             'email' => ['required', 'email', 'max:64', Rule::unique('users', 'email')],
@@ -42,7 +44,18 @@ class UserController extends Controller {
             'roles' => ['required'],
         ]);
 
-        $user = User::create($attributes);
+        $transaction = Transaction::create([
+            'dept_id' => $request->user()->id,
+            'status' => 1
+        ]);
+
+        $user = User::create([
+            'name' => $attributes['name'],
+            'email' => $attributes['email'],
+            'password' => $attributes['password'],
+            'employee_id' => $attributes['employee_id'],
+        ]);
+
         $user->assignRole($attributes['roles']);
 
         return $request->wantsJson()

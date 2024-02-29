@@ -8,9 +8,13 @@ use App\Models\Article;
 
 class PostController extends Controller {
 
-    // public function __construct() {
-    //     $this->authorizeResource(Article::class, 'article');
-    // }
+    public function __construct() {
+        $this->authorizeResource(Article::class, 'article');
+        // $this->middleware(['permission:post_access|post_item|post_create|post_update|post_delete'], ['only' => ['index', 'show']]);
+        // $this->middleware(['permission:post_create'], ['only' => ['create', 'store']]);
+        // $this->middleware(['permission:post_update'], ['only' => ['edit', 'update']]);
+        // $this->middleware(['permission:post_delete'], ['only' => ['destroy']]);        
+    }
 
     public function index(Request $request) {
         $data = Article::latest()->paginate(69);
@@ -75,11 +79,14 @@ class PostController extends Controller {
             : redirect()->route('posts.index');
     }
 
-    public function destroy(Article $article) {
-        $article->delete();
+    public function destroy(Request $request, string $user_id) {
+
+        $post = Article::where('id', $user_id)->firstOrFail();
+        $post->delete();
 
         return $request->wantsJson()
             ? response()->json(['message' => 'article deleted'], 200)
             : redirect()->route('users.index');
+            // : redirect('/');
     }
 }
