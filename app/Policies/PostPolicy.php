@@ -9,6 +9,8 @@ use Illuminate\Auth\Access\HandlesAuthorization;
 
 class PostPolicy {
 
+    use HandlesAuthorization;
+
     /**
      * Determine whether the user can view any models.
      */

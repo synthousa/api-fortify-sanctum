@@ -33,14 +33,9 @@ Route::group(['middleware' => ['auth:api']], function() {
 
     Route::prefix('admin')->group(function () {
         
-        Route::resource('users', UserController::class);
-        // Route::resource('roles', RoleController::class);
-        Route::resource('posts', PostController::class);
-
-        // Route::prefix('users')->group(function () {
-            
-        //     Route::get('/', [UserController::class, 'index']);
-        // });
-
+        Route::resources([
+            'users' => UserController::class,
+            'posts' => PostController::class
+        ]);
     });
 });
