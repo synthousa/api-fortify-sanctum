@@ -46,6 +46,7 @@ class UserController extends Controller {
 
         $transaction = Transaction::create([
             'dept_id' => $request->user()->id,
+            'user_id' => $request->user()->id,
             'status' => 1
         ]);
 
