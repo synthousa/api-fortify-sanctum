@@ -5,6 +5,11 @@ namespace App\Http\Controllers\Admin;
 use App\Models\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Spatie\Permission\Models\Role;
 
@@ -17,9 +22,9 @@ class UserController extends Controller {
     public function index(Request $request) {
         $data = User::latest()->paginate(10);
 
-        return $request -> wantsJson()
-            ? response() -> json(['list' => $data], 200)
-            : redirect() -> view('users.index', compact('data'));
+        return $request->wantsJson()
+            ? response()->json(['list' => $data], 200)
+            : redirect()->view('users.index', compact('data'));
     }
 
     public function create() {
@@ -41,8 +46,8 @@ class UserController extends Controller {
         $user->assignRole($attributes['roles']);
 
         return $request->wantsJson()
-            ? response() -> json(['message' => 'user created'], 201)
-            : redirect() -> view('users.index');
+            ? response()->json(['message' => 'user created'], 201)
+            : redirect()->view('users.index');
     }
 
     public function show(string $id) {
@@ -54,16 +59,39 @@ class UserController extends Controller {
         //
     }
 
-
     public function update(Request $request, string $id) {
 
-        //
+        $attributes = request()->validate([
+            'name' => ['required'],
+            'email' => ['required', 'email', Rule::unique('users')->ignore($request->id)],
+            'password' => ['same:confirm-password'],
+            'roles' => ['required'],
+        ]);
+
+        if(!empty($attributes['password'])){ 
+            $attributes['password'] = Hash::make($attributes['password']);
+        }else{
+            $attributes = Arr::except($attributes,array('password'));    
+        }
+
+        $user = User::find($id);
+        $user->update($attributes);
+
+        DB::table('model_has_roles')->where('model_id',$id)->delete();
+        $user->assignRole($attributes['roles']);
+
+        return $request->wantsJson()
+            ? response()->json(['message' => 'user updated'], 201)
+            : redirect()->back();          
     }
 
+    public function destroy(Request $request, string $id) {
 
-    public function destroy(string $id) {
+        User::find($id)->delete();
 
-        //
+        return $request->wantsJson()
+            ? response()->json(['message' => 'user deleted'], 200)
+            : redirect()->route('users.index');
     }
 
 }
