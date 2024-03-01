@@ -42,10 +42,11 @@ class UserController extends Controller {
             'password' => ['required', 'min:8'],
             'employee_id' => ['required', 'max:5'],
             'roles' => ['required'],
+            'department' => ['required'],
         ]);
 
         $transaction = Transaction::create([
-            'dept_id' => $request->user()->id,
+            'dept_id' => $attributes['department'],
             'user_id' => $request->user()->id,
             'status' => 1
         ]);

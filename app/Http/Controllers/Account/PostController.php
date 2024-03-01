@@ -10,10 +10,6 @@ class PostController extends Controller {
 
     public function __construct() {
         $this->authorizeResource(Article::class, 'article');
-        // $this->middleware(['permission:post_access|post_item|post_create|post_update|post_delete'], ['only' => ['index', 'show']]);
-        // $this->middleware(['permission:post_create'], ['only' => ['create', 'store']]);
-        // $this->middleware(['permission:post_update'], ['only' => ['edit', 'update']]);
-        // $this->middleware(['permission:post_delete'], ['only' => ['destroy']]);        
     }
 
     public function index(Request $request) {
